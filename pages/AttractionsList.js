@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Button, ActivityIndicator, SafeAreaView, ScrollView, FlatList, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Button, ActivityIndicator, SafeAreaView, ScrollView, FlatList, TouchableOpacity, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default class AttractionListScreen extends React.Component {
@@ -54,13 +54,14 @@ export default class AttractionListScreen extends React.Component {
           <TouchableOpacity>
             <View>
               <Text onPress={ () => navigate('AttractionDetails', {Attraction: item})} style={styles.Attraction}>{item.name} </Text>
+              <Image  style={styles.imageView} source={{ uri: item.photo }} />
             </View>
           <Button  title="Adicionar aos Favoritos " style={styles.AttractionFav}
            onPress={async () => {
-                      const AttractionList = await AsyncStorage.getItem(
+                      const AttractionsFavorites = await AsyncStorage.getItem(
                         'AttractionFavorite'
                       )
-                      const items = AttractionList ? JSON.parse(AttractionList) : []
+                      const items = AttractionsFavorites ? JSON.parse(AttractionsFavorites) : []
                       if (items.indexOf(item.name) === -1) {
                         items.push(item.name)
                         await AsyncStorage.setItem(
@@ -73,10 +74,10 @@ export default class AttractionListScreen extends React.Component {
                     } } />
           <Button  title="Remover dos Favoritos " style={styles.AttractionFav}
            onPress={async () => {
-                      const AttractionList = await AsyncStorage.getItem(
+                      const AttractionsFavorites = await AsyncStorage.getItem(
                         'AttractionFavorite'
                       )
-                      const items = AttractionList ? JSON.parse(AttractionList) : []
+                      const items = AttractionsFavorites ? JSON.parse(AttractionsFavorites) : []
                       if (items.indexOf(item.nome) > -1) {
                         items.splice(items.indexOf(item.nome), 1)
                         await AsyncStorage.setItem(
@@ -116,7 +117,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10
   },
-  AttractionADD: {
-    
-  }
+  imageView: {
+    width: '100%',
+    height: 100,
+  },
 })
