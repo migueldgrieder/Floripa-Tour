@@ -1,14 +1,23 @@
-import * as React from 'react';
-import { Text, View, StyleSheet, Button, ActivityIndicator, SafeAreaView, ScrollView, FlatList, TouchableOpacity, Image } from 'react-native';
+import * as React from 'react'
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  ActivityIndicator,
+  FlatList,
+  Image,
+  TouchableOpacity
+} from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export default class AttractionListScreen extends React.Component {
+export default class PlacesListScreen extends React.Component {
   static navigationOptions = {
-    title: 'Todas Atrações',
-  };
- 
-  constructor(props){
-    super(props);
+    title: 'Atrações Turísticas'
+  }
+
+  constructor(props) {
+    super(props)
     this.state = { isLoading: true }
   }
 
@@ -30,95 +39,121 @@ export default class AttractionListScreen extends React.Component {
         });
     });
   }
- 
+
   componentWillUnmount() {
-    this.focusListener.remove();
-  } 
- 
+    this.focusListener.remove()
+  }
+
   render() {
-    if(this.state.isLoading){
-      return(
-        <View style={{flex: 1, padding: 20}}>
-          <ActivityIndicator/>
+    if (this.state.isLoading) {
+      return (
+        <View style={{ flex: 1, padding: 20 }}>
+          <ActivityIndicator />
         </View>
       )
     }
- 
-    const {navigate} = this.props.navigation;
-    return(
-      <ScrollView style={styles.container}>
 
+    const { navigate } = this.props.navigation
+    return (
+      <View style={styles.container}>
         <FlatList
           data={this.state.Attractions}
-          renderItem={({item}) =>
-          <TouchableOpacity>
+          renderItem={({ item }) => (
             <View>
-              <Text onPress={ () => navigate('AttractionDetails', {Attraction: item})} style={styles.Attraction}>{item.name} </Text>
-              <Image  style={styles.imageView} source={{ uri: item.photo }} />
-            </View>
-          <Button  title="Adicionar aos Favoritos " style={styles.AttractionFav}
-           onPress={async () => {
-                      const AttractionsFavorites = await AsyncStorage.getItem(
-                        'AttractionFavorite'
+              <View style={styles.containerImage}>
+              <Text style={styles.title}>{item.name}</Text>
+              <Image style={styles.imageView} source={{ uri: item.photo }} />
+              </View>
+              <View>
+                <TouchableOpacity
+                  onPress={() => navigate('PlacesDetails', { place: item })}
+                >
+                </TouchableOpacity>
+                <View style={styles.secondContainerImage}>
+                  <TouchableOpacity
+                    onPress={async () => {
+                      const placesList = await AsyncStorage.getItem(
+                        'AttractionsFavorites'
                       )
-                      const items = AttractionsFavorites ? JSON.parse(AttractionsFavorites) : []
+                      const items = placesList ? JSON.parse(placesList) : []
                       if (items.indexOf(item.name) === -1) {
                         items.push(item.name)
                         await AsyncStorage.setItem(
-                          'AttractionFavorite',
+                          'AttractionsFavorites',
                           JSON.stringify(items)
                         )
                       } else {
                         console.log('error')
                       }
-                    } } />
-          <Button  title="Remover dos Favoritos " style={styles.AttractionFav}
-           onPress={async () => {
-                      const AttractionsFavorites = await AsyncStorage.getItem(
-                        'AttractionFavorite'
+                    }}
+                  >
+                    <View style={styles.containerTitle}>
+                      <Text style={styles.favorite}>Adicionar aos Favoritos</Text>
+                      
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={async () => {
+                      const placesList = await AsyncStorage.getItem(
+                        'AttractionsFavorites'
                       )
-                      const items = AttractionsFavorites ? JSON.parse(AttractionsFavorites) : []
-                      if (items.indexOf(item.nome) > -1) {
-                        items.splice(items.indexOf(item.nome), 1)
+                      const items = placesList ? JSON.parse(placesList) : []
+                      if (items.indexOf(item.name) > -1) {
+                        items.splice(items.indexOf(item.name), 1)
                         await AsyncStorage.setItem(
-                          'AttractionFavorite',
+                          'AttractionsFavorites',
                           JSON.stringify(items)
                         )
                       } else {
                         console.log('error')
                       }
-                    }} /> 
-
-
-
-          </TouchableOpacity>
-          
-          }
-          
+                    }}
+                  >
+                    <View style={styles.containerTitle}>
+                      <Text style={styles.favorite}>Remover dos Favoritos</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          )}
         />
-        <View>
         <Button title="Voltar" onPress={() => navigate('Home')} />
-        </View>
-        </ScrollView>
-    );
+      </View>
+    )
   }
 }
- 
+
 const styles = StyleSheet.create({
   container: {
-   padding: 15
-  },
-  Attraction: {
-    fontSize: 18,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    textAlign: 'center',
-    marginTop: 10,
-    marginBottom: 10
+    padding: 15,
+    height: '100%'
   },
   imageView: {
     width: '100%',
     height: 100,
   },
+  containerImage: {
+    justifyContent: 'center',
+    alignItems: 'center',
+
+  },
+  title: {
+    padding: 10,
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'blue'
+  },
+  favorite: {  
+  fontSize: 14,
+
+  },
+ 
+  containerTitle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 5
+  }
+
 })
