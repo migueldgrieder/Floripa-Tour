@@ -16,7 +16,7 @@ export default class AttractionsFavoritesListScreen extends React.Component {
     const { navigation } = this.props
 
     this.focusListener = navigation.addListener('didFocus', async () => {
-      const value = await AsyncStorage.getItem('favoriteAttraction')
+      const value = await AsyncStorage.getItem('AttractionFavorite')
       this.setState(
         {
           isLoading: false,

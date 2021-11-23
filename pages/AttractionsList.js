@@ -55,7 +55,7 @@ export default class AttractionListScreen extends React.Component {
             <View>
               <Text onPress={ () => navigate('AttractionDetails', {Attraction: item})} style={styles.Attraction}>{item.name} </Text>
             </View>
-          <Button  title="Adicionar aos Favoritos " style={styles.AttractionADD}
+          <Button  title="Adicionar aos Favoritos " style={styles.AttractionFav}
            onPress={async () => {
                       const AttractionList = await AsyncStorage.getItem(
                         'AttractionFavorite'
@@ -71,7 +71,7 @@ export default class AttractionListScreen extends React.Component {
                         console.log('error')
                       }
                     } } />
-          <Button  title="Remover dos Favoritos " style={styles.AttractionADD}
+          <Button  title="Remover dos Favoritos " style={styles.AttractionFav}
            onPress={async () => {
                       const AttractionList = await AsyncStorage.getItem(
                         'AttractionFavorite'
@@ -86,7 +86,7 @@ export default class AttractionListScreen extends React.Component {
                       } else {
                         console.log('error')
                       }
-                    }} />
+                    }} /> 
 
 
 
@@ -109,18 +109,14 @@ const styles = StyleSheet.create({
   },
   Attraction: {
     fontSize: 18,
-    height: 44,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     textAlign: 'center',
-
+    marginTop: 10,
+    marginBottom: 10
   },
   AttractionADD: {
-    width: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
     
   }
 })
