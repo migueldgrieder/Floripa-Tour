@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, Button, ActivityIndicator, SafeAreaView, ScrollView, FlatList, TouchableOpacity } from 'react-native';
- 
-export default class AttractionListScreen extends React.Component {
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
+export default class AttractionsFavoritesListScreen extends React.Component {
   static navigationOptions = {
     title: 'Atrações Favoritas',
   };
@@ -11,24 +12,21 @@ export default class AttractionListScreen extends React.Component {
     this.state = { isLoading: true }
   }
 
-  componentDidMount(){
-    const { navigation } = this.props;
+  componentDidMount() {
+    const { navigation } = this.props
 
-    this.focusListener = navigation.addListener('didFocus', () => {
-      return fetch('https://api.jsonbin.io/b/619a659a0ddbee6f8b0fb1d0')
-        .then((response) => response.json())
-        .then((json) => {
-          this.setState({
-            isLoading: false,
-            Attractions: json,
-          }, function(){
-          });
-        })
-        .catch((error) =>{
-          console.error(error);
-        });
-    });
+    this.focusListener = navigation.addListener('didFocus', async () => {
+      const value = await AsyncStorage.getItem('favoriteAttraction')
+      this.setState(
+        {
+          isLoading: false,
+          attraction: JSON.parse(value)
+        },
+        function () {}
+      )
+    })
   }
+
  
   componentWillUnmount() {
     this.focusListener.remove();
@@ -47,7 +45,7 @@ export default class AttractionListScreen extends React.Component {
     return(
       <ScrollView style={styles.container}>
          <FlatList
-          data={this.state.Attractions}
+          data={this.state.attraction}
           renderItem={({item}) =>
           <TouchableOpacity onPress={ () => navigate('AttractionDetails', {Attraction: item})}>
             <View>
