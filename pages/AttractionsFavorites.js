@@ -54,7 +54,7 @@ export default class FavPlacesListScreen extends React.Component {
           renderItem={({ item }) => (
             <View>
               <View>
-                <Text style={styles.title}> {item}</Text>
+                <Text style={styles.title} > {item}</Text>
               </View>
             </View>
           )}

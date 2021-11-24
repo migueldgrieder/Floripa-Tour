@@ -60,16 +60,21 @@ export default class PlacesListScreen extends React.Component {
           data={this.state.Attractions}
           renderItem={({ item }) => (
             <View>
-              <View style={styles.containerImage}>
+            <TouchableOpacity
+                  onPress={() => navigate('AttractionDetails', { Attraction: item })}
+                >
+    
               <Text style={styles.title}>{item.name}</Text>
               <Image style={styles.imageView} source={{ uri: item.photo }} />
-              </View>
+              
+              
+              </TouchableOpacity>
               <View>
-                <TouchableOpacity
-                  onPress={() => navigate('PlacesDetails', { place: item })}
-                >
-                </TouchableOpacity>
+                
+                
                 <View style={styles.secondContainerImage}>
+                  
+                 
                   <TouchableOpacity
                     onPress={async () => {
                       const placesList = await AsyncStorage.getItem(
@@ -88,10 +93,12 @@ export default class PlacesListScreen extends React.Component {
                     }}
                   >
                     <View style={styles.containerTitle}>
-                      <Text style={styles.favorite}>Adicionar aos Favoritos</Text>
-                      
-                    </View>
+                      <Text style={styles.favorite}>Adicionar aos Favoritos</Text>        
+                    </View> 
+
                   </TouchableOpacity>
+
+
                   <TouchableOpacity
                     onPress={async () => {
                       const placesList = await AsyncStorage.getItem(
